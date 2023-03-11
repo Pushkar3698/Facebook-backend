@@ -4,10 +4,11 @@ const PORT = process.env.PORT || 8000;
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const path = require("path");
+
+// routes //
 const userRoutes = require("./Routes/User");
 const feedRouter = require("./Routes/Feed");
-
-const path = require("path");
 
 const url =
   "mongodb+srv://Pushkar3698:pushi123@cluster0.qytoiff.mongodb.net/?retryWrites=true&w=majority";
@@ -15,7 +16,14 @@ const url =
 require("dotenv").config();
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://main.d3krfrp3fruepo.amplifyapp.com/"
+  );
+  next();
+});
+
+app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Methods",
     "OPTIONS, GET, POST, PUT, PATCH, DELETE"
