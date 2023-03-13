@@ -86,8 +86,14 @@ exports.addLike = async (req, res, next) => {
 
     await post.populate("creatorId");
 
+    await post.populate({
+      path: "comments.userId",
+      model: "User",
+    });
+
     const io = getIO();
     io.emit("like-post", post);
+
     res.json("post liked/unliked");
   } catch (err) {
     console.log(err);
