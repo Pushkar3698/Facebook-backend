@@ -37,3 +37,6 @@ router.post("/deletePost", isAuth, deletePost);
 router.post("/addComment", isAuth, addComment);
 
 module.exports = router;
+
+// access AKIASYV4OMMMZOQQ3BBD
+// secret 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

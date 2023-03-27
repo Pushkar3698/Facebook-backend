@@ -1,6 +1,7 @@
 const userModel = require("../models/User");
 const Post = require("../models/Post");
 const { getIO } = require("../socket io/io");
+const { uploadFile } = require("../s3");
 
 exports.home = (req, res, next) => {
   userModel
@@ -19,16 +20,18 @@ exports.home = (req, res, next) => {
 
 exports.createPost = async (req, res, next) => {
   try {
-    const { text, createdBy, createdAt } = req.body;
-    // let { path, filename } = req.file;
+    const { text, createdBy } = req.body;
+
     let path;
     let filename;
 
     if (!req.file) {
       path = filename = "";
     } else {
-      path = req.file.path;
-      filename = req.file.filename;
+      const result = await uploadFile(req.file);
+      path = result.Location;
+      filename = result.Key;
+      console.log(result);
     }
 
     const post = new Post({
@@ -37,6 +40,7 @@ exports.createPost = async (req, res, next) => {
       imagePath: path,
       imageFileName: filename,
     });
+
     await post.save();
 
     const newPost = await post.populate("creatorId");
@@ -47,6 +51,7 @@ exports.createPost = async (req, res, next) => {
     res.status(200).json({ message: "Post created" });
   } catch (err) {
     res.status(400).json({ message: "could not create post" });
+    console.log(err);
   }
 };
 
