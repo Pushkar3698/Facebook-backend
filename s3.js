@@ -1,6 +1,8 @@
 require("dotenv").config();
 const { S3 } = require("aws-sdk");
 const fs = require("fs");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_REGION;
@@ -13,14 +15,26 @@ const s3 = new S3({
   secretAccessKey: secretKey,
 });
 
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: bucketName,
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString() + "-" + file.originalname);
+    },
+  }),
+});
+
 // uploads a file
 
 const uploadFile = (file) => {
-  const fileStream = fs.createReadStream(file.path);
   const uploadParams = {
     Bucket: bucketName,
-    Body: fileStream,
-    Key: file.filename,
+    Body: file.buffer,
+    Key: file.originalname,
   };
 
   return s3.upload(uploadParams).promise();
@@ -37,4 +51,4 @@ const getFileStream = (fileKey) => {
   return s3.getObject(downloadParams).createReadStream();
 };
 
-module.exports = { uploadFile, getFileStream };
+module.exports = { uploadFile, getFileStream, upload };

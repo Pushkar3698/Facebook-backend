@@ -2,6 +2,7 @@ const userModel = require("../models/User");
 const Post = require("../models/Post");
 const { getIO } = require("../socket io/io");
 const { uploadFile, getFileStream } = require("../s3");
+const fs = require("fs");
 
 exports.home = (req, res, next) => {
   userModel
