@@ -6,6 +6,7 @@ const {
   addLike,
   deletePost,
   addComment,
+  getImage,
 } = require("../controller/feed");
 
 const { isAuth } = require("../middleware/is-auth");
@@ -29,6 +30,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// router.get("/images/:key", getImage);
 router.post("/home", isAuth, home);
 router.post("/createPost", upload.single("image"), createPost);
 router.get("/getPosts", isAuth, getPosts);
@@ -37,6 +39,3 @@ router.post("/deletePost", isAuth, deletePost);
 router.post("/addComment", isAuth, addComment);
 
 module.exports = router;
-
-// access AKIASYV4OMMMZOQQ3BBD
-// secret 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

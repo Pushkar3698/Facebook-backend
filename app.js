@@ -16,10 +16,7 @@ const url =
 require("dotenv").config();
 
 app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://main.d3krfrp3fruepo.amplifyapp.com"
-  );
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   next();
 });
 
@@ -52,7 +49,7 @@ mongoose
     const server = app.listen(PORT);
     const data = {
       cors: {
-        origin: "https://main.d3krfrp3fruepo.amplifyapp.com",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST", "PUT"],
       },
     };

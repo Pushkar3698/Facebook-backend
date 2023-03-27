@@ -1,7 +1,7 @@
 const userModel = require("../models/User");
 const Post = require("../models/Post");
 const { getIO } = require("../socket io/io");
-const { uploadFile } = require("../s3");
+const { uploadFile, getFileStream } = require("../s3");
 
 exports.home = (req, res, next) => {
   userModel
@@ -54,6 +54,14 @@ exports.createPost = async (req, res, next) => {
     console.log(err);
   }
 };
+
+// exports.getImage = async (req, res, next) => {
+//   const key = req.params.key;
+//   console.log(key);
+//   const readStream = getFileStream(key);
+
+//   readStream.pipe(res);
+// };
 
 exports.getPosts = async (req, res, next) => {
   try {
